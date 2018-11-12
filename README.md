@@ -1,0 +1,1 @@
+Install Jupyter and open mrz.ipynb
