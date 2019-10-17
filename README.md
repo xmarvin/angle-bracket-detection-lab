@@ -1,1 +1,1 @@
-Install Jupyter, matplotlib and opencv-python, and open mrz.ipynb
+Install Jupyter, matplotlib and opencv-python, and open mrz-lab.ipynb
