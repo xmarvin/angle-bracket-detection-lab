@@ -1,4 +1,8 @@
 .ipynb_checkpoints
-*.py
+*.pyc
 env/
 mask_bracket/logs/
+*.h5
+__pycache__touch
+tmp/**
+test.py
