@@ -6,3 +6,4 @@ mask_bracket/logs/
 __pycache__touch
 tmp/**
 test.py
+mask_bracket/tmp/*
