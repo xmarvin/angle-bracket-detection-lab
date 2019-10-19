@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint, TensorBoard
-from sklearn.model_selection import train_test_split
 
 import params
 
@@ -12,16 +11,17 @@ model = params.model_factory()
 
 class MaskGenerator:
   def __init__(self, batch_size):
-    self.image = cv2.imread('data/sample_cropped.jpg', cv2.IMREAD_GRAYSCALE)
+    self.image = cv2.imread('data/sample.jpg', cv2.IMREAD_GRAYSCALE)
+    self.mask  = cv2.imread('data/mask.jpg', cv2.IMREAD_GRAYSCALE)
     self.image = cv2.resize(self.image, (input_size, input_size))
-    self.mask  = cv2.imread('data/mask_cropped.jpg', cv2.IMREAD_GRAYSCALE)
     self.mask  = cv2.resize(self.mask, (input_size, input_size))
+
     self.batch_size = batch_size
 
   def randomShiftScaleRotate(image, mask,
-                           shift_limit=(-0.07, 0.07),
-                           scale_limit=(-0.3, 0.3),
-                           rotate_limit=(-10, 10), aspect_limit=(0, 0),
+                           shift_limit=(-0.7, 0.7),
+                           scale_limit=(-0.5, 3),
+                           rotate_limit=(-3, 3), aspect_limit=(0, 0),
                            borderMode=cv2.BORDER_CONSTANT):
     height, width = image.shape
 
@@ -60,11 +60,12 @@ class MaskGenerator:
       x_batch = []
       y_batch = []
       for i in range(self.batch_size):
-        img, mask_img = MaskGenerator.randomShiftScaleRotate(self.image, self.mask)
+        img, msk = MaskGenerator.randomShiftScaleRotate(img, msk)
+        img =  params.simplify_image(img)
         img = np.expand_dims(img, axis=2)
-        mask_img = np.expand_dims(mask_img, axis=2)
+        msk = np.expand_dims(msk, axis=2)
         x_batch.append(img)
-        y_batch.append(mask_img)
+        y_batch.append(msk)
 
       x_batch = np.asarray(x_batch)
       y_batch = np.asarray(y_batch)

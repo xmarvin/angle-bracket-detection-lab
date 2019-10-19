@@ -7,3 +7,6 @@ __pycache__touch
 tmp/**
 test.py
 mask_bracket/tmp/*
+docs/mask_bracket/data/**
+mask_bracket/data/*
+docs/
