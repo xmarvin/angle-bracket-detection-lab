@@ -15,7 +15,7 @@ class MaskGenerator:
     self.mask  = cv2.imread('data/mask.jpg', cv2.IMREAD_GRAYSCALE)
     self.image = cv2.resize(self.image, (input_size, input_size))
     self.mask  = cv2.resize(self.mask, (input_size, input_size))
-
+    self.brackets = np.asarray(params.get_boundaries(self.mask))
     self.batch_size = batch_size
 
   def randomShiftScaleRotate(image, mask,
@@ -60,6 +60,11 @@ class MaskGenerator:
       x_batch = []
       y_batch = []
       for i in range(self.batch_size):
+        img = self.image
+        msk = self.mask
+        if np.random.rand()>0.3:
+          img, msk = params.disable_bracket(img, msk, self.brackets)
+
         img, msk = MaskGenerator.randomShiftScaleRotate(img, msk)
         img =  params.simplify_image(img)
         img = np.expand_dims(img, axis=2)
